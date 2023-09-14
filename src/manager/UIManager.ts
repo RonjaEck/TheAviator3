@@ -19,6 +19,8 @@ export class UIManager {
   mouseButtons: boolean[];
   keysDown: {};
 
+  gravity: number;
+
   constructor(private game: Game) {
     this._elemDistanceCounter = document.getElementById("distValue");
     this._elemReplayMessage = document.getElementById("replayMessage");
@@ -66,6 +68,8 @@ export class UIManager {
     this.mouseButtons = [false, false, false];
     this.keysDown = {};
 
+    this.gravity = 0.1;
+
     this._resizeListeners = [];
   }
 
@@ -105,6 +109,15 @@ export class UIManager {
     }
   }
 
+  handleSpaceKey(event) {
+    if (
+      event.code === "Space" &&
+      this.game.state.status === GameStatus.Playing
+    ) {
+      this.game.world.worldSettings.planeDefaultHeight += 20; // Ändern Sie den Wert je nach Bedarf
+    }
+  }
+
   handleKeyDown(event) {
     this.keysDown[event.code] = true;
     if (event.code === "KeyP") {
@@ -124,7 +137,10 @@ export class UIManager {
       // var tx = -1 + (event.clientX / this.width) * 2;
       // var ty = 1 - (event.clientY / this.height) * 2;
       // this.mousePos.y += 1;
-      
+      this.game.world.worldSettings.planeDefaultHeight += 2;
+    }
+    if (event.code === "Space") {
+      this.handleSpaceKey(event);
     }
   }
 
